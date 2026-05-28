@@ -8,8 +8,6 @@ OHIF Viewer forked and extended with a Dental Mode UI and Measurements Palette. 
 
 ## Architecture
 
-
-
 - **Frontend:** OHIF fork with `ohif-dental` extension + `dental-mode`
 - **Backend:** Node.js + Express + Prisma + PostgreSQL (Railway)
 - **Deployment:** Vercel (frontend) + Railway (backend + DB)
