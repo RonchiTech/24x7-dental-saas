@@ -25,13 +25,23 @@ function extractValueFromAnnotation(annotation: any, preset: MeasurementPreset):
   return Math.round((entry?.length ?? 0) * 10) / 10;
 }
 
+const bitewingStyle: React.CSSProperties = {
+  position: 'absolute', bottom: 0, width: '50%', height: '50%',
+  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+  gap: 6, pointerEvents: 'none',
+  background: 'rgba(10, 13, 20, 0.88)',
+  border: '1px dashed #2d3748',
+  color: '#4a5568',
+};
+
 // Inner component — lives inside DentalProvider so it can call useDental()
 function DentalLayoutContent({ viewports = [], ViewportGridComp }: any) {
   const { servicesManager, commandsManager, extensionManager } = useSystem();
-  const { selectedTooth } = useDental();
+  const { selectedTooth, setSelectedTooth } = useDental();
   const [measurements, setMeasurements] = React.useState<MeasurementRow[]>([]);
   const activePresetRef = React.useRef<MeasurementPreset | null>(null);
   const selectedToothRef = React.useRef<string>('');
+  const isRestoredRef = React.useRef(false);
 
   // Keep tooth ref in sync so the subscription closure always sees the current value
   React.useEffect(() => {
@@ -64,7 +74,32 @@ function DentalLayoutContent({ viewports = [], ViewportGridComp }: any) {
   }, []);
 
   const displaySetService = servicesManager?.services?.displaySetService;
-  const patientMeta = displaySetService?.activeDisplaySets?.[0]?.instances?.[0] ?? {};
+
+  // Track studyUID as React state so the load effect fires when display sets arrive
+  const [studyUID, setStudyUID] = React.useState<string>('unknown');
+  const [patientMeta, setPatientMeta] = React.useState<any>({});
+
+  React.useEffect(() => {
+    if (!displaySetService) return;
+
+    const syncMeta = () => {
+      const ds = displaySetService.activeDisplaySets?.[0];
+      const uid = ds?.StudyInstanceUID;
+      if (uid) setStudyUID(uid);
+      setPatientMeta(ds?.instances?.[0] ?? {});
+    };
+
+    // Run immediately (display sets may already be loaded on HMR / re-mount)
+    syncMeta();
+
+    // Subscribe so we also catch the async load case
+    const { unsubscribe } = displaySetService.subscribe(
+      displaySetService.EVENTS.DISPLAY_SETS_ADDED,
+      syncMeta
+    );
+    return unsubscribe;
+  }, [displaySetService]);
+
   const rawName = patientMeta.PatientName;
   const patient = {
     name: typeof rawName === 'object' ? (rawName?.Alphabetic ?? 'Unknown Patient') : (rawName ?? 'Unknown Patient'),
@@ -72,9 +107,31 @@ function DentalLayoutContent({ viewports = [], ViewportGridComp }: any) {
     mrn: patientMeta.PatientID ?? '—',
   };
 
-  const studyUID = displaySetService?.activeDisplaySets?.[0]?.StudyInstanceUID ?? 'unknown';
-  const { syncState } = useViewerStateSync(studyUID, API_BASE);
-  void syncState;
+  const { syncState, loadState } = useViewerStateSync(studyUID, API_BASE);
+
+  // Load saved state once when studyUID becomes known
+  React.useEffect(() => {
+    if (studyUID === 'unknown' || isRestoredRef.current) return;
+    isRestoredRef.current = true;
+    loadState().then(saved => {
+      if (!saved) return;
+      if (saved.measurements?.length) {
+        setMeasurements(saved.measurements.map((m: any) => ({
+          id: m.id, tooth: m.tooth, type: m.type,
+          label: m.label, value: m.value, unit: m.unit,
+        })));
+      }
+      if (saved.stateJson?.selectedTooth) {
+        setSelectedTooth(saved.stateJson.selectedTooth);
+      }
+    });
+  }, [studyUID, loadState, setSelectedTooth]);
+
+  // Persist state whenever measurements or selected tooth changes
+  React.useEffect(() => {
+    if (!isRestoredRef.current) return;
+    syncState({ selectedTooth }, measurements);
+  }, [measurements, selectedTooth, syncState]);
 
   const viewportComponents = React.useMemo(
     () =>
@@ -105,12 +162,33 @@ function DentalLayoutContent({ viewports = [], ViewportGridComp }: any) {
         <DentalMeasurementsPalette onActivatePreset={handleActivatePreset} />
       </div>
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, position: 'relative' }}>
           <ViewportGridComp
             servicesManager={servicesManager}
             commandsManager={commandsManager}
             viewportComponents={viewportComponents}
           />
+          {/* Bitewing placeholder overlays for the empty bottom two cells */}
+          <div style={{ ...bitewingStyle, left: 0 }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" opacity={0.5}>
+              <rect x="3" y="6" width="18" height="13" rx="2" />
+              <line x1="3" y1="11" x2="21" y2="11" />
+              <line x1="9" y1="6" x2="9" y2="19" />
+              <line x1="15" y1="6" x2="15" y2="19" />
+            </svg>
+            <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em' }}>BITEWING — LEFT</span>
+            <span style={{ fontSize: 10, opacity: 0.55 }}>No image loaded</span>
+          </div>
+          <div style={{ ...bitewingStyle, right: 0 }}>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" opacity={0.5}>
+              <rect x="3" y="6" width="18" height="13" rx="2" />
+              <line x1="3" y1="11" x2="21" y2="11" />
+              <line x1="9" y1="6" x2="9" y2="19" />
+              <line x1="15" y1="6" x2="15" y2="19" />
+            </svg>
+            <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.06em' }}>BITEWING — RIGHT</span>
+            <span style={{ fontSize: 10, opacity: 0.55 }}>No image loaded</span>
+          </div>
         </div>
         <div style={{ width: '240px', borderLeft: '1px solid #2d3748', overflowY: 'auto', background: '#0d1117' }}>
           <MeasurementsPanel measurements={measurements} onExport={handleExport} />
