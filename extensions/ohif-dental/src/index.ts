@@ -8,7 +8,7 @@ const id = '@ohif/extension-dental';
 
 const ohifDentalExtension: Types.Extensions.Extension = {
   id,
-  getCommandsModule,
+  getCommandsModule: (params: any) => getCommandsModule(params),
   getPanelModule: () => [],
   getToolbarModule: () => [],
   getHangingProtocolModule: () => [{ name: dentalProtocol.id, protocol: dentalProtocol }],

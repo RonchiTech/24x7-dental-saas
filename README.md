@@ -1,56 +1,83 @@
 # 24x7 Dental SaaS — OHIF Viewer Customization
 
-OHIF Viewer forked and extended with a Dental Mode UI and Measurements Palette. Backed by an Express + PostgreSQL API for JWT authentication and viewer state persistence.
+OHIF Viewer forked and extended with a **Dental Mode UI** and **Measurements Palette**. Backed by an Express + PostgreSQL API for JWT authentication and viewer-state persistence.
 
-## Live Demo
-- Frontend: https://\<vercel-url\>/dental
-- Backend health: https://\<railway-url\>/health
+## Features Implemented
+
+### A) Dental Mode UI Customization
+- **Practice Header** — practice name, patient name/DOB/MRN, Tooth Selector with FDI/Universal numbering toggle, and Dental Mode theme toggle
+- **2 × 2 Hanging Protocol** — top-left: current series, top-right: prior exam (same modality), bottom row: bitewing placeholders
+- **Dental theme** — dark palette (`#0d1117` / `#1a1f2e`) with teal accent (`#2c7a7b`), applied via CSS custom properties on `[data-dental-mode]`
+
+### B) Dental Measurements Palette
+- **"Measurements" toolbar button** opens a dropdown palette of one-click presets:
+  - **PA length** — Length tool, auto-labeled, mm
+  - **Canal angle** — Angle tool, auto-labeled, °
+  - **Crown width** — Length tool, auto-labeled, mm
+  - **Root length** — Length tool, auto-labeled, mm
+- Completed measurements stream into the **right-side Measurements Panel** (filter + sort by tooth / type / value)
+- **Export JSON** button downloads all measurements for the study
+
+### C) Backend (Node.js / Express / PostgreSQL)
+- `POST /auth/register` — create account (bcrypt + JWT)
+- `POST /auth/login` — authenticate
+- `GET/PUT /viewer-state/:studyUID` — persist/restore viewport state per study
+- `GET /viewer-state/:studyUID/measurements` — retrieve measurements
 
 ## Architecture
 
-- **Frontend:** OHIF fork with `ohif-dental` extension + `dental-mode`
-- **Backend:** Node.js + Express + Prisma + PostgreSQL (Railway)
-- **Deployment:** Vercel (frontend) + Railway (backend + DB)
+```
+extensions/ohif-dental/      ← OHIF extension (layout, components, commands, protocol)
+modes/dental-mode/           ← OHIF mode wiring
+backend/                     ← Express + Prisma + PostgreSQL API
+```
 
 ## Local Setup
 
 ### Prerequisites
-Node.js 20+, Yarn, local PostgreSQL (or Docker)
+- Node.js 20+
+- Yarn (enabled via `corepack enable`)
+- PostgreSQL (local or Docker)
 
-### Steps
+### 1. Backend
 
 ```bash
-git clone https://github.com/<you>/24x7-dental-saas.git
-cd 24x7-dental-saas
-
-# Backend
 cd backend
-cp .env.example .env          # edit DATABASE_URL, JWT_SECRET
+cp .env.example .env          # set DATABASE_URL and JWT_SECRET
 npm install
 npm run db:migrate
-npm run dev &
-
-# Frontend (new terminal)
-cd ..
-cp platform/app/.env.example platform/app/.env
-yarn install
-yarn run dev
+npm run dev
+# → http://localhost:4000/health
 ```
 
-Open http://localhost:3000/dental. Register with any email + password.
+### 2. Frontend
+
+```bash
+# from repo root
+yarn install
+yarn run dev
+# → http://localhost:3000
+```
+
+### 3. Open the viewer
+
+1. Go to `http://localhost:3000`
+2. The Study List loads 81 demo studies (from OHIF's public DICOMweb demo server)
+3. Click any study → click **Dental** button
+4. Register or sign in → the Dental Viewer opens
 
 ## Running Tests
 
 ```bash
-# Backend (9 tests)
+# Backend (9 integration tests — requires running PostgreSQL)
 cd backend && npm test
 
-# Frontend extension (22 tests)
+# Frontend extension (22 unit tests)
 yarn workspace @ohif/extension-dental test
 ```
 
 ## Demo Video
-[Link to video]
+[Link to video — ≤5 min recording of the full flow]
 
 ---
 
