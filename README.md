@@ -1,3 +1,61 @@
+# 24x7 Dental SaaS — OHIF Viewer Customization
+
+OHIF Viewer forked and extended with a Dental Mode UI and Measurements Palette. Backed by an Express + PostgreSQL API for JWT authentication and viewer state persistence.
+
+## Live Demo
+- Frontend: https://\<vercel-url\>/dental
+- Backend health: https://\<railway-url\>/health
+
+## Architecture
+
+
+
+- **Frontend:** OHIF fork with `ohif-dental` extension + `dental-mode`
+- **Backend:** Node.js + Express + Prisma + PostgreSQL (Railway)
+- **Deployment:** Vercel (frontend) + Railway (backend + DB)
+
+## Local Setup
+
+### Prerequisites
+Node.js 20+, Yarn, local PostgreSQL (or Docker)
+
+### Steps
+
+```bash
+git clone https://github.com/<you>/24x7-dental-saas.git
+cd 24x7-dental-saas
+
+# Backend
+cd backend
+cp .env.example .env          # edit DATABASE_URL, JWT_SECRET
+npm install
+npm run db:migrate
+npm run dev &
+
+# Frontend (new terminal)
+cd ..
+cp platform/app/.env.example platform/app/.env
+yarn install
+yarn run dev
+```
+
+Open http://localhost:3000/dental. Register with any email + password.
+
+## Running Tests
+
+```bash
+# Backend (9 tests)
+cd backend && npm test
+
+# Frontend extension (22 tests)
+yarn workspace @ohif/extension-dental test
+```
+
+## Demo Video
+[Link to video]
+
+---
+
 <!-- prettier-ignore-start -->
 <div align="center">
   <h1>OHIF Medical Imaging Viewer</h1>
