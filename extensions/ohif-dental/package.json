@@ -1,0 +1,18 @@
+{
+  "name": "@ohif/extension-dental",
+  "version": "0.1.0",
+  "description": "OHIF dental mode extension",
+  "main": "src/index.ts",
+  "private": true,
+  "scripts": {
+    "test": "jest --config jest.config.js"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "*",
+    "@testing-library/jest-dom": "*",
+    "react": "*"
+  }
+}
