@@ -1,5 +1,11 @@
 # Packages
 node_modules
+
+# Dental SaaS additions
+.superpowers/
+backend/node_modules/
+backend/.env
+backend/dist/
 .cursor/
 .nyc_output/
 # Output
