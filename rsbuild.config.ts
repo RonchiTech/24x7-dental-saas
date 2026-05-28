@@ -101,6 +101,9 @@ export default defineConfig({
       '@hooks': path.resolve(__dirname, './platform/app/src/hooks'),
       '@routes': path.resolve(__dirname, './platform/app/src/routes'),
       '@state': path.resolve(__dirname, './platform/app/src/state'),
+      // Force single React instance across all workspace packages
+      'react': path.resolve(__dirname, './node_modules/react'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
     },
   },
   output: {

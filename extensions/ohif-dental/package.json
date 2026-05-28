@@ -10,9 +10,11 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0"
   },
+  "peerDependencies": {
+    "react": ">=17"
+  },
   "devDependencies": {
     "@testing-library/react": "*",
-    "@testing-library/jest-dom": "*",
-    "react": "*"
+    "@testing-library/jest-dom": "*"
   }
 }
