@@ -1,0 +1,28 @@
+:root[data-dental-mode] {
+  --header-bg: #ffffff;
+  --header-border: #dddddd;
+  --header-text: #111111;
+  --header-text-secondary: #666666;
+  --accent: #2c7a7b;
+  --accent-hover: #235f60;
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+:root[data-dental-mode] .ohif-header {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  color: var(--header-text);
+  font-family: var(--font-family);
+}
+
+:root[data-dental-mode] .ohif-toolbar {
+  background: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+  font-family: var(--font-family);
+}
+
+:root[data-dental-mode] .panel-right {
+  background: #ffffff;
+  border-left: 1px solid #dddddd;
+  font-family: var(--font-family);
+}
