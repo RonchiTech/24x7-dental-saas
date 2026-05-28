@@ -1,0 +1,7 @@
+{
+  "name": "@ohif/mode-dental",
+  "version": "0.1.0",
+  "description": "Dental mode for OHIF",
+  "main": "src/index.tsx",
+  "private": true
+}
