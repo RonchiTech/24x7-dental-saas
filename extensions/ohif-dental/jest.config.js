@@ -6,7 +6,6 @@ module.exports = {
     '<rootDir>/src/**/*.test.ts',
     '<rootDir>/src/**/*.test.tsx',
   ],
-  setupFilesAfterEnv: ['@testing-library/jest-dom'],
   moduleNameMapper: {
     ...base.moduleNameMapper,
     '@ohif/core': '<rootDir>/../../platform/core/src',
