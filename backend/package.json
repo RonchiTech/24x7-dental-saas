@@ -24,6 +24,9 @@
       "dotenv/config"
     ]
   },
+  "engines": {
+    "node": ">=20.19"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
