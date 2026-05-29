@@ -10,8 +10,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import { MeasurementPreset } from '../DentalMeasurementsPalette/presets';
 import { useViewerStateSync } from '../../hooks/useViewerStateSync';
 
-const API_BASE =
-  (typeof process !== 'undefined' && process.env?.REACT_APP_API_BASE) ?? 'http://localhost:4000';
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:4000';
 
 // Extracts numeric value from a Cornerstone annotation's cachedStats
 function extractValueFromAnnotation(annotation: any, preset: MeasurementPreset): number {

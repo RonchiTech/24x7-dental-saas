@@ -50,6 +50,9 @@ export default defineConfig({
       'process.env.LOCIZE_PROJECTID': JSON.stringify(process.env.LOCIZE_PROJECTID || ''),
       'process.env.LOCIZE_API_KEY': JSON.stringify(process.env.LOCIZE_API_KEY || ''),
       'process.env.REACT_APP_I18N_DEBUG': JSON.stringify(process.env.REACT_APP_I18N_DEBUG || ''),
+      'process.env.REACT_APP_API_BASE': JSON.stringify(
+        process.env.REACT_APP_API_BASE || 'https://24x7-dental-saas-production.up.railway.app'
+      ),
     },
   },
   plugins: [pluginReact(), pluginNodePolyfill()],
