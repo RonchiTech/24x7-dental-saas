@@ -135,7 +135,6 @@ provided by the <a href="https://ohif.org/">Open Health Imaging Foundation (OHIF
 | <img src="https://github.com/OHIF/Viewers/blob/master/platform/docs/docs/assets/img/demo-ecg.webp?raw=true" alt="ECG" width="350"/> | ECG Waveform  | [Demo](https://viewer-dev.ohif.org/viewer?StudyInstanceUIDs=2.25.209974489360710696739324151261716440238) |
 
 ## About
-
 The OHIF Viewer can retrieve
 and load images from most sources and formats, render sets in 2D, 3D, and
 reconstructed representations; allows for the manipulation, annotation, and
