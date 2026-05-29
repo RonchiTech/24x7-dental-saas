@@ -1,5 +1,9 @@
 # 24x7 Dental SaaS — OHIF Viewer Customization
 
+**Live demo:** https://24x7-dental-saas.vercel.app  
+**Backend API:** https://24x7-dental-saas-production.up.railway.app/health  
+**GitHub:** https://github.com/RonchiTech/24x7-dental-saas
+
 OHIF Viewer forked and extended with a **Dental Mode UI** and **Measurements Palette**. Backed by an Express + PostgreSQL API for JWT authentication and viewer-state persistence.
 
 ## Features Implemented
