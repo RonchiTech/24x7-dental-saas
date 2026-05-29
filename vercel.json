@@ -1,0 +1,9 @@
+{
+  "buildCommand": "yarn install && yarn run build",
+  "outputDirectory": "platform/app/dist",
+  "installCommand": "yarn install",
+  "framework": null,
+  "env": {
+    "REACT_APP_API_BASE": "https://24x7-dental-saas-production.up.railway.app"
+  }
+}
