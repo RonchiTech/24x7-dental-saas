@@ -2,6 +2,7 @@
 
 window.config = {
   name: 'config/default.js',
+  dentalApiBase: 'https://24x7-dental-saas-production.up.railway.app',
   routerBasename: null,
   // whiteLabeling: {},
   extensions: [],
