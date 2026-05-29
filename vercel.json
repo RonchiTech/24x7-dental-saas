@@ -5,5 +5,6 @@
   "framework": null,
   "env": {
     "REACT_APP_API_BASE": "https://24x7-dental-saas-production.up.railway.app"
-  }
+  },
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
