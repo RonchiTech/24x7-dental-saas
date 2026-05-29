@@ -12,7 +12,8 @@
     "test": "jest --runInBand",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "postinstall": "prisma generate"
   },
   "jest": {
     "preset": "ts-jest",
